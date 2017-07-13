@@ -1,0 +1,5 @@
+.DS_Store
+
+/server/composer.lock
+/server/vendor
+/server/storage
