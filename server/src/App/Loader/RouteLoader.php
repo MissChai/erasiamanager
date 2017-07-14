@@ -47,14 +47,18 @@ class RouteLoader {
      * Binds repositories into Silex\Application Container
      */
 	public function bindRepositoriesToContainer() {
-
+		$this->app['character.repository'] = function() {
+			return new Repository\CharacterRepository( $this->app['db'] );
+		};
 	}
 
     /**
      * Binds controllers into Silex\Application Container
      */
 	private function bindControllersToContainer() {
-
+		$this->app['character.controller'] = function() {
+			return new Controller\CharacterController( $this->app, $this->app['character.repository'] );
+		};
 	}
 
     /**
@@ -62,5 +66,17 @@ class RouteLoader {
      */
 	public function bindRoutesToControllers() {
 		$this->app->get( '/', function () { return phpinfo(); } );
+
+		$api = $this->app['controllers_factory'];
+
+		// Character
+		$api->get(    '/characters',           'character.controller:catalogueAction' );
+		$api->get(    '/characters/{char_id}', 'character.controller:getAction' )->assert( 'char_id', '\d+' );
+		$api->post(   '/characters',           'character.controller:createAction' );
+		$api->put(    '/characters/{char_id}', 'character.controller:updateAction' )->assert( 'char_id', '\d+' );
+		$api->patch(  '/characters/{char_id}', 'character.controller:updateAction' )->assert( 'char_id', '\d+' );
+		$api->delete( '/characters/{char_id}', 'character.controller:deleteAction' )->assert( 'char_id', '\d+' );
+
+		$this->app->mount( $this->app['api.endpoint'] . '/' . $this->app['api.version'], $api );
 	}
 }
