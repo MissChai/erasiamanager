@@ -47,5 +47,7 @@ class ProviderLoader {
 		));
 
 		$this->app->register( new Provider\ServiceControllerServiceProvider() );
+		$this->app->register( new Provider\FormServiceProvider() );
+		$this->app->register( new Provider\ValidatorServiceProvider() );
 	}
 }
