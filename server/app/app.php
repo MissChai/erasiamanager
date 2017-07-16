@@ -13,7 +13,7 @@ ExceptionHandler::register( $app['debug'] );
 $app->error( function ( Exception $e, Request $request ) use ( $app ) {
 	$error_domain  = 'App';
 	$error_type    = 'Exception';
-	$error_message = 'We are sorry, but something went wrong.';
+	$error_message = 'We are sorry, but it seems something went wrong.';
 	$error_code    = 500;
 
 	if ( $e ) {
