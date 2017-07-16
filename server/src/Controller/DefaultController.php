@@ -3,6 +3,8 @@
 namespace ErasiaManagerAPI\Controller;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Form;
 
 use ErasiaManagerAPI\Repository\DefaultRepository;
 
@@ -59,6 +61,20 @@ abstract class DefaultController {
      */
 	public function getDataFromRequest( Request $request ) {
 		return json_decode( $request->getContent(), true );
+	}
+
+    /**
+     * Creates a string from the errors in a form
+     *
+     * @param Request $request Incoming request
+	 * @return The information decoded
+     */
+	public function convertFormErrorsToString( Form $form ) {
+		$errors = array();
+		foreach ( $form->getErrors( true, true ) as $error ) {
+			array_push( $errors, $error->getMessage() );
+		}
+		return implode( "|", $errors );
 	}
 
 	/**

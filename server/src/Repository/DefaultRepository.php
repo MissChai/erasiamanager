@@ -32,8 +32,8 @@ abstract class DefaultRepository {
 	}
 
 	/**
-	 * Builds a domain object from a DB row
+	 * Builds a domain object from a database row
 	 * (Must be overridden by child classes)
 	 */
-	protected abstract function buildDomainObject( $row );
+	protected abstract function buildDomainObject( array $row );
 }

@@ -127,7 +127,14 @@ Here is the global scheme of the response you can get from the API.
 	#FAILURE
 	{
 		'apiVersion': '1.0',
-		'errors': [ 'File not found' ],
+		'errors': [
+			{
+				'code': 404,
+				'domain': 'CharacterRepository',
+				'type': 'InvalidArgumentException',
+				'message': 'Character not found: the identifier "7" does not match any known character.'
+			}
+		],
 	}
 
 ## Frontend

@@ -1,9 +1,48 @@
 <?php
 
+use Symfony\Component\Debug\ErrorHandler;
+use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use ErasiaManagerAPI\App\Loader;
+
+// Process Exceptions
+ErrorHandler::register();
+ExceptionHandler::register( $app['debug'] );
+
+$app->error( function ( Exception $e, Request $request ) use ( $app ) {
+	$error_domain  = 'App';
+	$error_type    = 'Exception';
+	$error_message = 'We are sorry, but something went wrong.';
+	$error_code    = 500;
+
+	if ( $e ) {
+		$error_domain  = preg_replace( '/.*\/(\w*).php/', '${1}', $e->getFile() );
+		$error_type    = preg_replace( '/.*\\\(\w*)/',    '${1}', get_class( $e ) );
+		$error_message = ( $e->getMessage() ) ? $e->getMessage() : $error_message;
+
+		$error_code = ( $e->getCode() ) ? $e->getCode() : $error_code;
+		if ( preg_match( '/^No route found for/', $error_message ) ) {
+			$error_code = 404;
+		}
+
+		$app['monolog']->addError( $error_message );
+		$app['monolog']->addError( $e->getTraceAsString() );
+	}
+	else {
+		$app['monolog']->addError( $error_message );
+	}
+
+	return $app->json( array(
+		'apiVersion' => $app['api.version'],
+		'errors'     => array(
+			'domain'  => $error_domain,
+			'type'    => $error_type,
+			'message' => $error_message,
+			'code'    => $error_code,
+		)
+	), $error_code );
+});
 
 // Accept JSON
 $app->before( function ( Request $request ) {
@@ -26,20 +65,6 @@ $providerLoader->registerProvidersToContainer();
 // Load Routes
 $routeLoader = new Loader\RouteLoader( $app );
 $routeLoader->loadRoutes();
-
-// Catch exceptions
-$app->error( function ( Exception $e, Request $request, $code ) use ( $app ) {
-	$app['monolog']->addError( $e->getMessage() );
-	$app['monolog']->addError( $e->getTraceAsString() );
-
-	$error_code    = ( $e and $e->getCode() )    ? $e->getCode()    : $code;
-	$error_message = ( $e and $e->getMessage() ) ? $e->getMessage() : 'We are sorry, but something went wrong.';
-
-	return new JsonResponse( array(
-		'apiVersion' => $app['api.version'],
-		'errors'     => array( $error_message )
-	), $error_code );
-});
 
 // Return
 return $app;

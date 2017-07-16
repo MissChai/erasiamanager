@@ -4,6 +4,7 @@ namespace ErasiaManagerAPI\App\Loader;
 
 use Silex\Application;
 
+use ErasiaManagerAPI\Repository;
 use ErasiaManagerAPI\Controller;
 
 class RouteLoader {
@@ -22,6 +23,15 @@ class RouteLoader {
      */
 	public function __construct( Application $app ) {
 		$this->app = $app;
+	}
+
+	/**
+	 * Returns the Silex container
+	 *
+	 * @return Silex\Application Silex application
+	 */
+	protected function getApp() {
+		return $this->app;
 	}
 
     /**

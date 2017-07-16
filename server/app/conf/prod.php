@@ -13,3 +13,6 @@ $app['db.options'] = array(
     'user'     => 'em_user',
     'password' => '***',
 );
+
+// Debug
+$app['debug'] = false;

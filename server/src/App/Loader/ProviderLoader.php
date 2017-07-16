@@ -12,7 +12,7 @@ class ProviderLoader {
      *
      * @var Silex\Application
      */
-	protected $app;
+	private $app;
 
     /**
      * Constructor
@@ -21,6 +21,15 @@ class ProviderLoader {
      */
 	public function __construct( Application $app ) {
 		$this->app = $app;
+	}
+
+	/**
+	 * Returns the Silex container
+	 *
+	 * @return Silex\Application Silex application
+	 */
+	protected function getApp() {
+		return $this->app;
 	}
 
     /**
@@ -36,5 +45,7 @@ class ProviderLoader {
 		$this->app->register( new Provider\DoctrineServiceProvider(), array(
 			'db.options' => $this->app['db.options']
 		));
+
+		$this->app->register( new Provider\ServiceControllerServiceProvider() );
 	}
 }
