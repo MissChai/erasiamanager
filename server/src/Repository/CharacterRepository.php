@@ -9,7 +9,7 @@ class CharacterRepository extends DefaultRepository {
 	/**
 	 * Return a list of all characters, sorted by name
 	 *
-	 * @return array A list of ErasiaManagerAPI\Entity\Character
+	 * @return array List of ErasiaManagerAPI\Entity\Character
 	 */
 	public function findAll(): array {
 		$sql = "
@@ -27,12 +27,13 @@ class CharacterRepository extends DefaultRepository {
 	}
 
 	/**
-	 * Returns a character matching the supplied id
+	 * Returns a character matching the supplied identifier
 	 *
-	 * @param int $char_id The character id
- 	 * @return ErasiaManagerAPI\Entity\Character|String if an error occured
+	 * @param int $char_id Character identifier
+	 * @return ErasiaManagerAPI\Entity\Character Character
+	 * @throws InvalidArgumentException if no character is found
 	 */
-    public function findById( int $char_id ): Character {
+	public function findById( int $char_id ): Character {
 		$sql = "
 			SELECT *
 			FROM t_character
@@ -46,15 +47,15 @@ class CharacterRepository extends DefaultRepository {
 		else {
 			throw new \InvalidArgumentException( sprintf( 'Character not found: the identifier "%s" does not match any known character.', $char_id ), 404 );
 		}
-    }
+	}
 
 	/**
 	 * Saves a character into the database
 	 *
-	 * @param ErasiaManagerAPI\Entity\Character $character The character to save
-	 * @return ErasiaManagerAPI\Entity\Character The saved character
+	 * @param ErasiaManagerAPI\Entity\Character $character Character to save
+	 * @return ErasiaManagerAPI\Entity\Character Saved character
 	 */
-    function save( Character $character ): Character {
+	function save( Character $character ): Character {
 		// Data
 		$character_data = array(
 			'char_name'   => htmlspecialchars( $character->getName() ),
@@ -73,22 +74,22 @@ class CharacterRepository extends DefaultRepository {
 			$this->getDb()->insert( 't_character', $character_data );
 			return $this->findById( $this->getDb()->lastInsertId() );
 		}
-    }
+	}
 
 	/**
 	 * Removes a character from the database
 	 *
-	 * @param int $char_id The character id
+	 * @param int $char_id Character identifier
 	 */
-    function delete( int $char_id ) {
+	function delete( int $char_id ) {
 		$this->getDb()->delete( 't_character', array( 'char_id' => $this->findById( $char_id )->getId() ) );
-    }
+	}
 
 	/**
-	 * Creates a ErasiaManagerAPI\Entity\Character based on a database row
+	 * Creates a ErasiaManagerAPI\Entity\Character using on a database row
 	 *
-	 * @param array $row The database row containing the data
-	 * @return ErasiaManagerAPI\Entity\Character
+	 * @param array $row Database row containing the data
+	 * @return ErasiaManagerAPI\Entity\Character Character
 	 */
 	protected function buildDomainObject( array $row ) {
 		$character = new Character();

@@ -16,7 +16,7 @@ abstract class DefaultRepository {
 	/**
 	 * Constructor
 	 *
-	 * @param Doctrine\DBAL\Connection $db The database connection object
+	 * @param Doctrine\DBAL\Connection $db Database connection object
 	 */
 	public function __construct( Connection $db ) {
 		$this->db = $db;
@@ -25,7 +25,7 @@ abstract class DefaultRepository {
 	/**
 	 * Grants access to the database connection object
 	 *
-	 * @return Doctrine\DBAL\Connection The database connection object
+	 * @return Doctrine\DBAL\Connection Database connection object
 	 */
 	protected function getDb() {
 		return $this->db;

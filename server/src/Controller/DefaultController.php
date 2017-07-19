@@ -10,18 +10,18 @@ use ErasiaManagerAPI\Repository\DefaultRepository;
 
 abstract class DefaultController {
 
-    /**
-     * Container
-     *
-     * @var Silex\Application
-     */
+	/**
+	 * Container
+	 *
+	 * @var Silex\Application
+	 */
 	private $app;
 
-    /**
-     * Repository
-     *
-     * @var ErasiaManagerAPI\Service\DefaultRepository
-     */
+	/**
+	 * Repository
+	 *
+	 * @var ErasiaManagerAPI\Service\DefaultRepository
+	 */
 	private $repository;
 
 	/**
@@ -47,28 +47,28 @@ abstract class DefaultController {
 	/**
 	 * Returns the repository
 	 *
-	 * @return \ErasiaManagerAPI\Repository\DefaultRepository repository
+	 * @return ErasiaManagerAPI\Repository\DefaultRepository Repository
 	 */
 	protected function getRepository() {
 		return $this->repository;
 	}
 
-    /**
-     * Retrieves data from a Request
-     *
-     * @param Request $request Incoming request
-	 * @return The information decoded
-     */
+	/**
+	 * Retrieves data from a Request
+	 *
+	 * @param Symfony\Component\HttpFoundation\Request $request Incoming request
+	 * @return array Decoded information
+	 */
 	public function getDataFromRequest( Request $request ) {
 		return json_decode( $request->getContent(), true );
 	}
 
-    /**
-     * Creates a string from the errors in a form
-     *
-     * @param Request $request Incoming request
-	 * @return The information decoded
-     */
+	/**
+	 * Creates a string from the errors of a form
+	 *
+	 * @param Symfony\Component\Form\Form $form Form
+	 * @return string Error string
+	 */
 	public function convertFormErrorsToString( Form $form ) {
 		$errors = array();
 		foreach ( $form->getErrors( true, true ) as $error ) {
@@ -78,11 +78,11 @@ abstract class DefaultController {
 	}
 
 	/**
-	 * Returns a JsonResponse when a error occured
+	 * Returns a JsonResponse with data
 	 *
-	 * @param Array|Entity $data An array of entities
-	 * @param int $code The return code
-	 * @return JsonResponse Information about the error that occured
+	 * @param Array|Entity $data An array of entities or an entity to be transformed into a array
+	 * @param int $code Return code
+	 * @return JsonResponse
 	 */
 	protected function returnJsonResponse( $data, int $code = 200 ) {
 		$json = array();

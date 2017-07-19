@@ -13,13 +13,13 @@ class CharacterType extends AbstractType {
 		$builder->add( 'name', Type\TextType::class, array(
 			'constraints' => array(
 				new Constraints\NotBlank( array(
-					'message' => 'Please enter a character name.'
+					'message' => 'Your character name is mandatory.'
 				)),
 				new Constraints\Length( array(
 					'min'        => 1,
 					'max'        => 255,
-					'minMessage' => 'Your character name can not be shorter than {{ limit }} character.',
-		            'maxMessage' => 'Your character name can not be longer than {{ limit }} characters.',
+					'minMessage' => 'Your character name is too short.',
+					'maxMessage' => 'Your character name is too long.',
 				)),
 			),
 		));
@@ -28,7 +28,7 @@ class CharacterType extends AbstractType {
 			'constraints' => array(
 				new Constraints\GreaterThan( array(
 					'value'   => -1,
-					'message' => 'The character can not have negative points.',
+					'message' => 'Your character can not have negative points.',
 				)),
 			),
 		));
@@ -37,7 +37,7 @@ class CharacterType extends AbstractType {
 			'constraints' => array(
 				new Constraints\Length( array(
 					'max'        => 255,
-		            'maxMessage' => 'What color name is longer than {{ limit }} characters?',
+					'maxMessage' => 'What color name is longer than {{ limit }} characters?',
 				)),
 			),
 		));

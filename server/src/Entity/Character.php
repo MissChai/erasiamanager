@@ -66,12 +66,12 @@ class Character implements JsonSerializable {
 		$this->color = $color;
 	}
 
-    public function jsonSerialize() {
-        return [
+	public function jsonSerialize() {
+		return [
 			'id'     => $this->id,
 			'name'   => $this->name,
 			'points' => $this->points,
 			'color'  => $this->color
 		];
-    }
+	}
 }

@@ -9,18 +9,18 @@ use ErasiaManagerAPI\Controller;
 
 class RouteLoader {
 
-    /**
-     * Container
-     *
-     * @var Silex\Application
-     */
+	/**
+	 * Container
+	 *
+	 * @var Silex\Application
+	 */
 	private $app;
 
-    /**
-     * Constructor
-     *
-     * @param Silex\Application $app container
-     */
+	/**
+	 * Constructor
+	 *
+	 * @param Silex\Application $app Silex container
+	 */
 	public function __construct( Application $app ) {
 		$this->app = $app;
 	}
@@ -28,44 +28,46 @@ class RouteLoader {
 	/**
 	 * Returns the Silex container
 	 *
-	 * @return Silex\Application Silex application
+	 * @return Silex\Application Silex container
 	 */
 	protected function getApp() {
 		return $this->app;
 	}
 
-    /**
-     * Binds routes to controllers
-     */
+	/**
+	 * Load routes
+	 */
 	public function loadRoutes() {
 		$this->bindRepositoriesToContainer();
 		$this->bindControllersToContainer();
 		$this->bindRoutesToControllers();
 	}
 
-    /**
-     * Binds repositories into Silex\Application Container
-     */
+	/**
+	 * Binds repositories into Silex\Application container
+	 */
 	public function bindRepositoriesToContainer() {
 		$this->app['character.repository'] = function() {
 			return new Repository\CharacterRepository( $this->app['db'] );
 		};
 	}
 
-    /**
-     * Binds controllers into Silex\Application Container
-     */
+	/**
+	 * Binds controllers into Silex\Application container
+	 */
 	private function bindControllersToContainer() {
 		$this->app['character.controller'] = function() {
 			return new Controller\CharacterController( $this->app, $this->app['character.repository'] );
 		};
 	}
 
-    /**
-     * Binds routes to controllers
-     */
+	/**
+	 * Binds routes to controllers
+	 */
 	public function bindRoutesToControllers() {
-		$this->app->get( '/', function () { return phpinfo(); } );
+		if ( $this->app['debug'] ) {
+			$this->app->get( '/', function () { return phpinfo(); } );
+		}
 
 		$api = $this->app['controllers_factory'];
 

@@ -57,12 +57,12 @@ You must then modify `/Applications/MAMP/conf/apache/extras/httpd-vhosts.conf` b
 	# Localhost
 	#
 	<VirtualHost *:80>
-    	DocumentRoot "/Applications/MAMP/htdocs"
-    	ServerName localhost
-   		<Directory /Applications/MAMP/htdocs >
-       		AllowOverride All
-       		Allow from All
-   		</Directory>
+		DocumentRoot "/Applications/MAMP/htdocs"
+		ServerName localhost
+		<Directory /Applications/MAMP/htdocs >
+			AllowOverride All
+			Allow from All
+		</Directory>
 	</VirtualHost>
 
 	#

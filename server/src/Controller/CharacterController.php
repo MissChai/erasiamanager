@@ -12,41 +12,42 @@ use ErasiaManagerAPI\Form\Type\CharacterType;
 
 class CharacterController extends DefaultController {
 
-    /**
-     * Constructor
-     *
+	/**
+	 * Constructor
+	 *
 	 * @param Silex\Application $app Silex application
-     * @param ErasiaManagerAPI\Repository\CharacterRepository $repository repository
-     */
+	 * @param ErasiaManagerAPI\Repository\CharacterRepository $repository repository
+	 */
 	public function __construct( Application $app, CharacterRepository $repository ) {
 		parent::__construct( $app, $repository );
-    }
+	}
 
 	/**
 	 * Returns a JSON response with a list of all characters, sorted by name
 	 *
-	 * @return JsonResponse A list of all characters
+	 * @return JsonResponse List of all characters
 	 */
 	public function catalogueAction() {
 		return $this->returnJsonResponse( $this->getRepository()->findAll() );
 	}
 
-    /**
-     * Returns a JSON response with information about a character
-     *
-	 * @param int $char_id The character id
+	/**
+	 * Returns a JSON response with information about a character
+	 *
+	 * @param int $char_id Character identifier
 	 * @return JsonResponse Information about the character
-     */
+	 */
 	public function getAction( int $char_id ) {
 		return $this->returnJsonResponse( $this->getRepository()->findById( $char_id ) );
 	}
 
-    /**
-     * Character creation
-     *
-     * @param Request $request Incoming request
+	/**
+	 * Character creation
+	 *
+	 * @param Symfony\Component\HttpFoundation\Request $request Incoming request
 	 * @return JsonResponse Information about the character
-     */
+	 * @throws InvalidArgumentException if the form is not valid
+	 */
 	public function createAction( Request $request ) {
 		$character = new Character();
 
@@ -59,13 +60,14 @@ class CharacterController extends DefaultController {
 		return $this->returnJsonResponse( $this->getRepository()->save( $character ), 201 );
 	}
 
-    /**
-     * Character update
-     *
-	 * @param int $char_id The character id
-     * @param Request $request Incoming request
+	/**
+	 * Character update
+	 *
+	 * @param int $char_id Character identifier
+	 * @param Symfony\Component\HttpFoundation\Request $request Incoming request
 	 * @return JsonResponse Information about the character
-     */
+	 * @throws InvalidArgumentException if the form is not valid
+	 */
 	public function updateAction( int $char_id, Request $request ) {	
 		$clearMissing = ( $request->getMethod() == 'PUT' ) ? true : false;
 		$character    = $this->getRepository()->findById( $char_id );
@@ -79,13 +81,13 @@ class CharacterController extends DefaultController {
 		return $this->returnJsonResponse( $this->getRepository()->save( $character ), 200 );
 	}
 
-    /**
-     * Character delete
-     *
-	 * @param int $char_id The character id
-     * @param Request $request Incoming request
+	/**
+	 * Character delete
+	 *
+	 * @param int $char_id Character identifier
+	 * @param Symfony\Component\HttpFoundation\Request $request Incoming request
 	 * @return JsonResponse
-     */
+	 */
 	public function deleteAction( int $char_id ) {
 		$this->getRepository()->delete( $char_id );
 		return $this->returnJsonResponse( null, 200 );
